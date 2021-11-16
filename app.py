@@ -1,3 +1,5 @@
+%%writefile app.py
+
 import html
 import process_frames as vAR_pf
 import capture_frames as vAR_cfu
@@ -51,11 +53,11 @@ if __name__ == '__main__':
         if vAR_datasource == 'Youtube':
             if 'f' not in vAR_st.session_state:
                 vAR_st.session_state.f = False
-            url = vAR_st.text_input('Enter the URL')
+            url = vAR_st.text_input('Enter the Youtube URL')
         if vAR_datasource == 'Camera':
             if 'f' not in vAR_st.session_state:
                 vAR_st.session_state.f = False
-            val = vAR_st.text_input('Enter the URL(cam)')
+            val = vAR_st.text_input('Enter the Camera URL')
 
     col1, col2, col3, col4 = vAR_st.columns([1, 3, 2, 1])
     with col2:
@@ -89,11 +91,9 @@ if __name__ == '__main__':
             if vAR_st.session_state.f != False:
                 if vAR_datapipeline:
                     if vAR_datasource=='Youtube':
-                        vAR_st.text('Youtube')
                         vAR_cfu.capture_frames_url(url, stop)
                         vAR_st.session_state.dp = True
                     if vAR_datasource=='Camera':
-                        vAR_st.text('Cam')
                         vAR_cfu.capture_frames_cam(val,stop)
                         vAR_st.session_state.dp = True
     

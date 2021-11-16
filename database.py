@@ -1,3 +1,5 @@
+%%writefile database.py
+
 import mysql.connector
 import streamlit as vAR_st
 
@@ -13,7 +15,8 @@ def insertFrame(photo, i):
         insert_frame = (photo, )
         result = cursor.execute(sql_insert_frame_query, insert_frame)
         connection.commit()
-        vAR_st.text("Frame",str(i),"inserted successfully")
+        out = "Frame "+str(i)+" inserted successfully"
+        vAR_st.text(out)
 
     except mysql.connector.Error as error:
         vAR_st.text("Failed inserting frame data into MySQL table {}".format(error))
@@ -119,7 +122,8 @@ def insertFrameData(photo, cid, name, phone, city, race, male, female, i):
         insert_frame = (photo, cid, name, city, phone, race, male, female)
         result = cursor.execute(sql_insert_frame_query, insert_frame)
         connection.commit()
-        vAR_st.text("Frame",str(i),"inserted successfully")
+        out = "Frame "+str(i)+" inserted successfully"
+        vAR_st.text(out)
 
     except mysql.connector.Error as error:
         vAR_st.text("Failed inserting frame data into MySQL table {}".format(error))
