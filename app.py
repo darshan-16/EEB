@@ -1,5 +1,3 @@
-%%writefile app.py
-
 import html
 import process_frames as vAR_pf
 import capture_frames as vAR_cfu
@@ -125,7 +123,7 @@ if __name__ == '__main__':
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            df_customers = pd.read_csv(vAR_customers, names=['cid', 'name', 'city', 'phone'])
+                            df_customers = pd.read_csv(vAR_customers, names=['cid', 'name', 'phone', 'city'])
                             df = df_customers.astype(str)
                             if 'pv' not in vAR_st.session_state:
                                 vAR_st.session_state.pv = False

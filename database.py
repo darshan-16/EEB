@@ -1,5 +1,3 @@
-%%writefile database.py
-
 import mysql.connector
 import streamlit as vAR_st
 
