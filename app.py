@@ -62,6 +62,7 @@ if __name__ == '__main__':
         if vAR_datasource == 'Youtube':
             if (url!='') and (not vAR_st.session_state.f):
                 vAR_cfu.check_url(url)
+                vAR_st.session_state.f = True
         if vAR_datasource == 'Camera':
             if (val!='') and (not vAR_st.session_state.f):
                 vAR_st.text(str(val))
@@ -148,14 +149,22 @@ if __name__ == '__main__':
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            if 'mp' not in vAR_st.session_state:
-                                vAR_st.session_state.mp = False
-                            vAR_modelpipeline = vAR_st.button("Start Model Pipeline")
-                            if vAR_modelpipeline:
-                                vAR_pf.model_pipeline()
-                                vAR_st.session_state.mp = True
-                            if vAR_st.session_state.mp == True:
-                                vAR_st.text("Done")
+                            if 'fs' not in vAR_st.session_state:
+                                vAR_st.session_state.fs = False
+                            vAR_featureselection = vAR_st.multiselect("Feature selection", ['Eyes', 'Ears', 'Nose', 'Mouth', 'Chin'])
+    
+    with col3:
+        if vAR_datasource != 'Select the source':
+            if vAR_st.session_state.f != False:
+                if vAR_st.session_state.dp != False:
+                    if vAR_st.session_state.de != False:
+                        if vAR_customers is not None:
+                            if 'fs' not in vAR_st.session_state:
+                                vAR_st.session_state.fs = False
+                            vAR_st.text(" ")
+                            vAR_submit = vAR_st.button("Submit", key="1")
+                            if vAR_submit:
+                                vAR_st.session_state.fs = True
     
     col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
     with col2:
@@ -164,15 +173,10 @@ if __name__ == '__main__':
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            if vAR_st.session_state.mp != False:
-                                if 'me' not in vAR_st.session_state:
-                                    vAR_st.session_state.me = False
-                                vAR_modelengineer = vAR_st.button("Start Model Engineering")
-                                if vAR_modelengineer:
-                                    vAR_pf.process_frames(df)
-                                    vAR_st.session_state.me = True
-                                if vAR_st.session_state.me == True:
-                                    vAR_st.text("Done")
+                            if vAR_st.session_state.fs != False:
+                                if 'hp' not in vAR_st.session_state:
+                                    vAR_st.session_state.hp = False
+                                vAR_hyperparametertune_ac = vAR_st.multiselect("Hyper parameter(action)", ['age', 'gender', 'race', 'emotion'])
     
     col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
     with col2:
@@ -181,13 +185,79 @@ if __name__ == '__main__':
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            if vAR_st.session_state.mp != False:
-                                if vAR_st.session_state.me != False:
-                                    if 'mo' not in vAR_st.session_state:
-                                        vAR_st.session_state.mo = False
-                                    vAR_modeloutcome = vAR_st.button("Model Outcome")
-                                    if vAR_st.session_state.mo == True:
+                            if vAR_st.session_state.fs != False:
+                                if 'hp' not in vAR_st.session_state:
+                                    vAR_st.session_state.hp = False
+                                vAR_hyperparametertune_md = vAR_st.selectbox("Hyper parameter(model)", ["VGG-Face", "Facenet", "Facenet512", "OpenFace", "DeepFace", "DeepID", "ArcFace", "Dlib"])
+    
+    col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
+    with col2:
+        if vAR_datasource != 'Select the source':
+            if vAR_st.session_state.f != False:
+                if vAR_st.session_state.dp != False:
+                    if vAR_st.session_state.de != False:
+                        if vAR_customers is not None:
+                            if vAR_st.session_state.fs != False:
+                                if 'hp' not in vAR_st.session_state:
+                                    vAR_st.session_state.hp = False
+                                vAR_submit_hp = vAR_st.button("Submit", key="2")
+                                if vAR_submit_hp:
+                                    vAR_st.session_state.hp = True
+    
+    
+    col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
+    with col2:
+        if vAR_datasource != 'Select the source':
+            if vAR_st.session_state.f != False:
+                if vAR_st.session_state.dp != False:
+                    if vAR_st.session_state.de != False:
+                        if vAR_customers is not None:
+                            if vAR_st.session_state.fs != False:
+                                if vAR_st.session_state.hp != False:
+                                    if 'mp' not in vAR_st.session_state:
+                                        vAR_st.session_state.mp = False
+                                    vAR_modelpipeline = vAR_st.button("Start Model Pipeline")
+                                    if vAR_modelpipeline:
+                                        vAR_pf.model_pipeline()
+                                        vAR_st.session_state.mp = True
+                                    if vAR_st.session_state.mp == True:
                                         vAR_st.text("Done")
+    
+    col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
+    with col2:
+        if vAR_datasource != 'Select the source':
+            if vAR_st.session_state.f != False:
+                if vAR_st.session_state.dp != False:
+                    if vAR_st.session_state.de != False:
+                        if vAR_customers is not None:
+                            if vAR_st.session_state.fs != False:
+                                if vAR_st.session_state.hp != False:
+                                    if vAR_st.session_state.mp != False:
+                                        if 'me' not in vAR_st.session_state:
+                                            vAR_st.session_state.me = False
+                                        vAR_modelengineer = vAR_st.button("Start Model Engineering")
+                                        if vAR_modelengineer:
+                                            vAR_pf.process_frames(df)
+                                            vAR_st.session_state.me = True
+                                        if vAR_st.session_state.me == True:
+                                            vAR_st.text("Done")
+    
+    col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
+    with col2:
+        if vAR_datasource != 'Select the source':
+            if vAR_st.session_state.f != False:
+                if vAR_st.session_state.dp != False:
+                    if vAR_st.session_state.de != False:
+                        if vAR_customers is not None:
+                            if vAR_st.session_state.fs != False:
+                                if vAR_st.session_state.hp != False:
+                                    if vAR_st.session_state.mp != False:
+                                        if vAR_st.session_state.me != False:
+                                            if 'mo' not in vAR_st.session_state:
+                                                vAR_st.session_state.mo = False
+                                            vAR_modeloutcome = vAR_st.button("Model Outcome")
+                                            if vAR_st.session_state.mo == True:
+                                                vAR_st.text("Done")
     
     col1, col2, col3 = vAR_st.columns([1, 5, 1])
     with col2:
@@ -196,13 +266,15 @@ if __name__ == '__main__':
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            if vAR_st.session_state.mp != False:
-                                if vAR_st.session_state.me != False:
-                                    if 'mo' not in vAR_st.session_state:
-                                        vAR_st.session_state.mo = False
-                                    if vAR_modeloutcome:
-                                        vAR_mo.outcome_model()
-                                        vAR_st.session_state.mo = True
+                            if vAR_st.session_state.fs != False:
+                                if vAR_st.session_state.hp != False:
+                                    if vAR_st.session_state.mp != False:
+                                        if vAR_st.session_state.me != False:
+                                            if 'mo' not in vAR_st.session_state:
+                                                vAR_st.session_state.mo = False
+                                            if vAR_modeloutcome:
+                                                vAR_mo.outcome_model()
+                                                vAR_st.session_state.mo = True
 
     col1, col2, col3, col4 = vAR_st.columns([1, 2, 2, 1])
     with col2:
@@ -211,31 +283,35 @@ if __name__ == '__main__':
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            if vAR_st.session_state.mp != False:
-                                if vAR_st.session_state.me != False:
-                                    if vAR_st.session_state.mo != False:
-                                        if 'an' not in vAR_st.session_state:
-                                            vAR_st.session_state.an = False
-                                        vAR_analyze = vAR_st.button("Send alert mail")
-                                        if vAR_analyze:
-                                            vAR_alert.check_presence(0)
-                                            vAR_st.session_state.an = True
-                                        if vAR_st.session_state.an == True:
-                                            vAR_st.text("Done")
+                            if vAR_st.session_state.fs != False:
+                                if vAR_st.session_state.hp != False:
+                                    if vAR_st.session_state.mp != False:
+                                        if vAR_st.session_state.me != False:
+                                            if vAR_st.session_state.mo != False:
+                                                if 'an' not in vAR_st.session_state:
+                                                    vAR_st.session_state.an = False
+                                                vAR_analyze = vAR_st.button("Send alert mail")
+                                                if vAR_analyze:
+                                                    vAR_alert.check_presence(0)
+                                                    vAR_st.session_state.an = True
+                                                if vAR_st.session_state.an == True:
+                                                    vAR_st.text("Done")
     with col3:
         if vAR_datasource != 'Select the source':
             if vAR_st.session_state.f != False:
                 if vAR_st.session_state.dp != False:
                     if vAR_st.session_state.de != False:
                         if vAR_customers is not None:
-                            if vAR_st.session_state.mp != False:
-                                if vAR_st.session_state.me != False:
-                                    if vAR_st.session_state.mo != False:
-                                        if 'an' not in vAR_st.session_state:
-                                            vAR_st.session_state.an = False
-                                        vAR_analyze = vAR_st.button("Send sms")
-                                        if vAR_analyze:
-                                            vAR_alert.check_presence(1)
-                                            vAR_st.session_state.an = True
-                                        if vAR_st.session_state.an == True:
-                                            vAR_st.text("Done")
+                            if vAR_st.session_state.fs != False:
+                                if vAR_st.session_state.hp != False:
+                                    if vAR_st.session_state.mp != False:
+                                        if vAR_st.session_state.me != False:
+                                            if vAR_st.session_state.mo != False:
+                                                if 'an' not in vAR_st.session_state:
+                                                    vAR_st.session_state.an = False
+                                                vAR_analyze = vAR_st.button("Send sms")
+                                                if vAR_analyze:
+                                                    vAR_alert.check_presence(1)
+                                                    vAR_st.session_state.an = True
+                                                if vAR_st.session_state.an == True:
+                                                    vAR_st.text("Done")

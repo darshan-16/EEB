@@ -22,7 +22,7 @@ def send_mail():
     msg['to'] = "darshanunofficial01@gmail.com"
     user = "alertmail73@gmail.com"
     msg['from'] = user
-    password = "emdxjfbtrpkftecf"
+    password = "aafkmwpycwljhemp"
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(user, password)
@@ -37,7 +37,7 @@ def send_sms():
     msg['to'] = "9162960228@txt.att.net"
     user = "alertmail73@gmail.com"
     msg['from'] = user
-    password = "emdxjfbtrpkftecf"
+    password = "aafkmwpycwljhemp"
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     server.login(user, password)
