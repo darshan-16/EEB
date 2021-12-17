@@ -61,7 +61,8 @@ if __name__ == '__main__':
     with col2:
         if vAR_datasource == 'Youtube':
             if (url!='') and (not vAR_st.session_state.f):
-                vAR_cfu.check_url(url)
+                vAR_st.text(str(url))
+                #vAR_cfu.check_url(url)
                 vAR_st.session_state.f = True
         if vAR_datasource == 'Camera':
             if (val!='') and (not vAR_st.session_state.f):
@@ -90,7 +91,7 @@ if __name__ == '__main__':
             if vAR_st.session_state.f != False:
                 if vAR_datapipeline:
                     if vAR_datasource=='Youtube':
-                        vAR_cfu.capture_frames_url(url, stop)
+                        vAR_cfu.capture_frames_cam(url, stop)
                         vAR_st.session_state.dp = True
                     if vAR_datasource=='Camera':
                         vAR_cfu.capture_frames_cam(val,stop)
