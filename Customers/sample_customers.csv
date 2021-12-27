@@ -1,4 +1,11 @@
-c01,Jeff bezos,9809834545,Coimbatore
-c02,Mark Zuckerberg,9676723545,Chennai
-c03,Bill Gates,8784523434,Mumbai
-c04,Elon musk,9479201896,Delhi
+Customer ID,Customer Name,Customer Phone,Customer Address,Customer Email
+c01,Jeff Bezos,2122989008,"New York, NY",jb01@gmail.com
+c02,Mark Zuckerberg,3125101439,"Chicago, IL",mz02@gmail.com
+c03,Bill Gates,2023008157,"Washington, DC",bg03@gmail.com
+c04,Elon Musk,6612458752,"Los Angeles, CA",em04@gmail.com
+c05,Mary,3135271020,"Detroit, MI",my05@gmail.com
+c06,James,2021462111,"Washington, DC",jm06@gmail.com
+c07,Jennifer,2023002741,"Washington, DC",jn07@gmail.com
+c08,Matthew,7182135298,"New York, NY",mt08@gmail.com
+c09,Steven,3101042849,"Los Angeles, CA",sv09@gmail.com
+c10,Jessica,4152125397,"San Francisco, CA",js10@gmail.com

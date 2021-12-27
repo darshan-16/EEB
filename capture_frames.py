@@ -29,7 +29,7 @@ def capture_frames_url(url, stop):
     if url!='':
         if not stop:
             url = str(url)
-            video = pafy.new(url)
+            video = pafy.new(url, )
             best  = video.getbest(preftype="mp4")
             cap = cv2.VideoCapture(best.url)
             vAR_db.truncateTable()

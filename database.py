@@ -13,7 +13,7 @@ def insertFrame(photo, i):
         insert_frame = (photo, )
         result = cursor.execute(sql_insert_frame_query, insert_frame)
         connection.commit()
-        out = "Frame "+str(i)+" inserted successfully"
+        out = "Frame "+str(i)+" Streamed & Inserted Successfully"
         vAR_st.text(out)
 
     except mysql.connector.Error as error:
@@ -35,7 +35,7 @@ def truncateTable():
         truncate_frame_query = """ TRUNCATE dsai_datacollection """
         truncate = cursor.execute(truncate_frame_query)
         connection.commit()
-        vAR_st.text("Truncated successfully")
+        #vAR_st.text("Truncated successfully")
 
     except mysql.connector.Error as error:
         vAR_st.text("Failed truncate MySQL table {}".format(error))
@@ -46,7 +46,7 @@ def truncateTable():
             connection.close()
 
 def readImg():
-    vAR_st.text("Reading")
+    #vAR_st.text("Reading")
     try:
         connection = mysql.connector.connect(host='66.42.60.177',
                                              database='dssaiai_dssaiai',
@@ -77,7 +77,7 @@ def truncateProTable():
         truncate_frame_query = """ TRUNCATE dsai_modeloutcome """
         truncate = cursor.execute(truncate_frame_query)
         connection.commit()
-        vAR_st.text("Truncated successfully")
+        #vAR_st.text("Truncated successfully")
 
     except mysql.connector.Error as error:
         vAR_st.text("Failed truncate MySQL table {}".format(error))
@@ -88,7 +88,7 @@ def truncateProTable():
             connection.close()
 
 def retrieve_frames():
-    vAR_st.text("Reading")
+    #vAR_st.text("Reading")
     try:
         connection = mysql.connector.connect(host='66.42.60.177',
                                              database='dssaiai_dssaiai',
@@ -108,7 +108,7 @@ def retrieve_frames():
             connection.close()
             return record
 
-def insertFrameData(photo, cid, name, phone, city, race, male, female, i):
+def insertFrameData(photo, cid, name, phone, address, email, race, male, female, i):
     try:
         connection = mysql.connector.connect(host='66.42.60.177',
                                              database='dssaiai_dssaiai',
@@ -116,11 +116,11 @@ def insertFrameData(photo, cid, name, phone, city, race, male, female, i):
                                              password='~z=wL1jg~Q4$')
 
         cursor = connection.cursor()
-        sql_insert_frame_query = """ INSERT INTO dsai_modeloutcome (frame, cid, name, phone, city, race, male, female) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"""
-        insert_frame = (photo, cid, name, city, phone, race, male, female)
+        sql_insert_frame_query = """ INSERT INTO dsai_modeloutcome (frame, customer_id, customer_name, customer_phone, customer_address, customer_email, customer_race, male, female) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)"""
+        insert_frame = (photo, cid, name, phone, address, email, race, male, female)
         result = cursor.execute(sql_insert_frame_query, insert_frame)
         connection.commit()
-        out = "Frame "+str(i)+" inserted successfully"
+        out = "Room "+str(i)+" Analyzed Successfully"
         vAR_st.text(out)
 
     except mysql.connector.Error as error:
