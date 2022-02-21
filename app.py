@@ -1,11 +1,11 @@
 import html
 import process_frames as vAR_pf
-import capture_frames as vAR_cfu
+from capture_frames import capture_frames as vAR_cfu
 import model_outcome as vAR_mo
 import visual as vAR_vu
 import pandas as pd
 import streamlit as vAR_st
-import alert as vAR_alert
+from alert import alert_notification as vAR_alert
 import streamlit.components.v1 as components
 from IPython.display import HTML
 from bokeh.models.widgets import Div
@@ -92,7 +92,7 @@ if __name__ == '__main__':
         vAR_st.subheader("Data Source")
     
     with col3:
-        vAR_datasource = vAR_st.selectbox('',('Select the source', 'Camera', 'Youtube'),index=0)
+        vAR_datasource = vAR_st.selectbox('',('Select the source', 'Live Camera', 'Video'),index=0)
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -109,14 +109,14 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource == 'Youtube':
+        if vAR_datasource == 'Video':
             if 'f' not in vAR_st.session_state:
                 vAR_st.session_state.f = False
-            url = vAR_st.text_input('Enter the Youtube URL')
-        if vAR_datasource == 'Camera':
+            url = vAR_st.text_input('Enter the Video URL')
+        if vAR_datasource == 'Live Camera':
             if 'f' not in vAR_st.session_state:
                 vAR_st.session_state.f = False
-            val = vAR_st.text_input('Enter the Camera URL')
+            val = vAR_st.text_input('Enter the Live Camera URL')
 
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
     with col1:
@@ -132,12 +132,12 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource == 'Youtube':
+        if vAR_datasource == 'Video':
             if (url!='') and (not vAR_st.session_state.f):
                 #vAR_cfu.check_url(url)
                 vAR_st.text(str(url))
                 vAR_st.session_state.f = True
-        if vAR_datasource == 'Camera':
+        if vAR_datasource == 'Live Camera':
             if (val!='') and (not vAR_st.session_state.f):
                 vAR_st.text(str(val))
                 vAR_st.session_state.f = True
@@ -157,19 +157,21 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
+        try:
             if vAR_st.session_state.f != False:
                 if 'vu' not in vAR_st.session_state:
                     vAR_st.session_state.vu = False
                 vAR_validate = vAR_st.button("Validate URL")
-                if vAR_validate and vAR_datasource == 'Camera':
+                if vAR_validate and vAR_datasource == 'Live Camera':
                     vAR_st.text("Surveillance Camera URL Reachable")
                     vAR_st.text("Valid URL")
                     vAR_st.session_state.vu = True
-                elif vAR_validate and vAR_datasource == 'Youtube':
-                    vAR_st.text("Youtube URL Reachable")
+                elif vAR_validate and vAR_datasource == 'Video':
+                    vAR_st.text("Video URL Reachable")
                     vAR_st.text("Valid URL")
                     vAR_st.session_state.vu = True
+        except:
+            pass
 
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -183,23 +185,29 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and  (vAR_st.session_state.vu != False):
+        try:
+            if vAR_st.session_state.vu != False:
                 vAR_st.subheader('Data Streaming')
+        except:
+            pass
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and  (vAR_st.session_state.vu != False):
+        try:
+            if vAR_st.session_state.vu != False:
                 if 'dp' not in vAR_st.session_state:
                     vAR_st.session_state.dp = False
                 vAR_datapipeline = vAR_st.button("Start Data Pipeline (Streaming)")
+        except:
+            pass
 
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and  (vAR_st.session_state.vu != False):
+        try:
+            if vAR_st.session_state.vu != False:
                 stop = vAR_st.button("Stop Data Streaming")
                 if stop:
                     vAR_st.session_state.dp = True
-    
+        except:
+            pass
+
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
     with col1:
         vAR_st.write('')
@@ -214,15 +222,17 @@ if __name__ == '__main__':
         vAR_st.write('')
         
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and  (vAR_st.session_state.vu != False):
+        try:
+            if vAR_st.session_state.vu != False:
                 if vAR_datapipeline:
-                    if vAR_datasource=='Youtube':
+                    if vAR_datasource=='Video':
                         vAR_cfu.capture_frames_cam(url, stop)
                         vAR_st.session_state.dp = True
-                    if vAR_datasource=='Camera':
+                    if vAR_datasource=='Live Camera':
                         vAR_cfu.capture_frames_cam(val,stop)
                         vAR_st.session_state.dp = True
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -236,20 +246,22 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    vAR_st.subheader('Data Engineering')
+        try:
+            if vAR_st.session_state.dp != False:
+                vAR_st.subheader('Data Engineering')
+        except:
+            pass
         
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if 'de' not in vAR_st.session_state:
-                        vAR_st.session_state.de = False
-                    vAR_dataengineer = vAR_st.button("Start Data Engineering")
-                    if vAR_dataengineer:
-                        vAR_st.session_state.de = True
+        try:
+            if vAR_st.session_state.dp != False:
+                if 'de' not in vAR_st.session_state:
+                    vAR_st.session_state.de = False
+                vAR_dataengineer = vAR_st.button("Start Data Engineering")
+                if vAR_dataengineer:
+                    vAR_st.session_state.de = True
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _ = vAR_st.columns([1, 6, 1])
@@ -260,11 +272,11 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        vAR_customers = vAR_st.file_uploader("Upload Customer Demographic Data")
+        try:
+            if vAR_st.session_state.de != False:
+                vAR_customers = vAR_st.file_uploader("Upload Property Manager/Owner Demographic Data")
+        except:
+            pass
     
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
     with col1:
@@ -280,18 +292,17 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            df_customers = pd.read_csv(vAR_customers)
-                            df = df_customers.astype(str)
-                            if 'pv' not in vAR_st.session_state:
-                                vAR_st.session_state.pv = False
-                            vAR_preview = vAR_st.button("Preview data")
-                            if vAR_preview:
-                                vAR_st.session_state.pv = True
+        try:
+            if vAR_customers is not None:
+                df_customers = pd.read_csv(vAR_customers)
+                df = df_customers.astype(str)
+                if 'pv' not in vAR_st.session_state:
+                    vAR_st.session_state.pv = False
+                vAR_preview = vAR_st.button("Preview data")
+                if vAR_preview:
+                    vAR_st.session_state.pv = True
+        except:
+            pass
     
     col1, col2, col3 = vAR_st.columns([1, 4, 1])
     with col1:
@@ -301,13 +312,13 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.pv:
-                                vAR_st.table(df_customers)
+        try:
+            if vAR_customers is not None:
+                if vAR_st.session_state.pv:
+                    df_customers.index += 1
+                    vAR_st.table(df_customers)
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -318,38 +329,35 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            vAR_st.subheader('Feature Selection')
+        try:
+            if vAR_customers is not None:
+                vAR_st.subheader('Feature Selection')
+        except:
+            pass
 
     with col4:
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if 'fs' not in vAR_st.session_state:
-                                vAR_st.session_state.fs = False
-                            vAR_featureselection = vAR_st.multiselect("Feature Selection for Gender Classifiction & Facial Recognition", ['Eyes', 'Ears', 'Nose', 'Mouth', 'Chin', 'Color', 'Weight', 'Height'])
+        try:
+            if vAR_customers is not None:
+                if 'fs' not in vAR_st.session_state:
+                    vAR_st.session_state.fs = False
+                vAR_featureselection = vAR_st.multiselect("Feature Selection for Gender Classifiction & Facial Recognition", ['Eyes', 'Ears', 'Nose', 'Mouth', 'Chin', 'Color', 'Weight', 'Height'])
+        except:
+            pass
     
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if 'fs' not in vAR_st.session_state:
-                                vAR_st.session_state.fs = False
-                            vAR_st.text(" ")
-                            vAR_submit = vAR_st.button("Submit", key="1")
-                            if vAR_submit:
-                                vAR_st.session_state.fs = True
+        try:
+            if vAR_customers is not None:
+                if 'fs' not in vAR_st.session_state:
+                    vAR_st.session_state.fs = False
+                vAR_st.text(" ")
+                vAR_submit = vAR_st.button("Submit", key="1")
+                if vAR_submit:
+                    vAR_st.session_state.fs = True
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -360,51 +368,39 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                vAR_st.subheader('Hyper Parameter Tuning')
+        try:
+            if vAR_st.session_state.fs != False:
+                vAR_st.subheader('Hyper Parameter Tuning')
+        except:
+            pass
 
     with col4:
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if 'hp' not in vAR_st.session_state:
-                                    vAR_st.session_state.hp = False
-                                vAR_hyperparametertune_ac = vAR_st.multiselect("Hyper parameter(action)", ['Age', 'Gender', 'Race', 'Emotion'])
+        try:
+            if vAR_st.session_state.fs != False:
+                if 'hp' not in vAR_st.session_state:
+                    vAR_st.session_state.hp = False
+                vAR_hyperparametertune_ac = vAR_st.multiselect("Hyper parameter(action)", ['Age', 'Gender', 'Race', 'Emotion'])
+        except:
+            pass
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if 'hp' not in vAR_st.session_state:
-                                    vAR_st.session_state.hp = False
-                                vAR_hyperparametertune_md = vAR_st.selectbox("Hyper parameter(model)", ["VGG-Face", "Facenet", "Facenet512", "OpenFace", "DeepFace", "DeepID", "ArcFace", "Dlib"])
+        try:
+            if vAR_st.session_state.fs != False:
+                vAR_hyperparametertune_md = vAR_st.selectbox("Hyper parameter(model)", ["VGG-Face", "Facenet", "Facenet512", "OpenFace", "DeepFace", "DeepID", "ArcFace", "Dlib"])
+        except:
+            pass
     
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if 'hp' not in vAR_st.session_state:
-                                    vAR_st.session_state.hp = False
-                                vAR_submit_hp = vAR_st.button("Submit", key="2")
-                                if vAR_submit_hp:
-                                    vAR_st.session_state.hp = True
+        try:
+            if vAR_st.session_state.fs != False:
+                vAR_submit_hp = vAR_st.button("Submit", key="2")
+                if vAR_submit_hp:
+                    vAR_st.session_state.hp = True
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -415,34 +411,28 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    vAR_st.subheader('Model Pipeline')
+        try:
+            if vAR_st.session_state.hp != False:
+                vAR_st.subheader('Model Pipeline')
+        except:
+            pass
 
     with col4:
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if 'mp' not in vAR_st.session_state:
-                                        vAR_st.session_state.mp = False
-                                    vAR_modelpipeline = vAR_st.button("Start Model Pipeline")
-                                    if vAR_modelpipeline:
-                                        vAR_pf.model_pipeline()
-                                        vAR_st.session_state.mp = True
-                                    if vAR_st.session_state.mp == True:
-                                        vAR_st.text("Done")
+        try:
+            if vAR_st.session_state.hp != False:
+                if 'mp' not in vAR_st.session_state:
+                    vAR_st.session_state.mp = False
+                vAR_modelpipeline = vAR_st.button("Start Model Pipeline")
+                if vAR_modelpipeline:
+                    vAR_pf.model_pipeline()
+                    vAR_st.session_state.mp = True
+                if vAR_st.session_state.mp == True:
+                    vAR_st.text("Done")
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -453,36 +443,28 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        vAR_st.subheader('Model Engineering')
+        try:
+            if vAR_st.session_state.mp != False:
+                vAR_st.subheader('Model Engineering')
+        except:
+            pass
 
     with col4:
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if 'me' not in vAR_st.session_state:
-                                            vAR_st.session_state.me = False
-                                        vAR_modelengineer = vAR_st.button("Start Model Engineering")
-                                        if vAR_modelengineer:
-                                            vAR_pf.process_frames(df)
-                                            vAR_st.session_state.me = True
-                                        if vAR_st.session_state.me == True:
-                                            vAR_st.text("Done")
+        try:
+            if vAR_st.session_state.mp != False:
+                if 'me' not in vAR_st.session_state:
+                    vAR_st.session_state.me = False
+                vAR_modelengineer = vAR_st.button("Start Model Engineering")
+                if vAR_modelengineer:
+                    vAR_pf.process_frames(df)
+                    vAR_st.session_state.me = True
+                if vAR_st.session_state.me == True:
+                    vAR_st.text("Done")
+        except:
+            pass
     
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -493,35 +475,25 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            vAR_st.subheader('Model Outcome')
+        try:
+            if vAR_st.session_state.me != False:
+                vAR_st.subheader('Model Outcome')
+        except:
+            pass
 
     with col4:
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if 'mo' not in vAR_st.session_state:
-                                                vAR_st.session_state.mo = False
-                                            vAR_modeloutcome = vAR_st.button("Review Model Outcome")
-                                            if vAR_st.session_state.mo == True:
-                                                vAR_st.text("Done")
+        try:
+            if vAR_st.session_state.me != False:
+                if 'mo' not in vAR_st.session_state:
+                    vAR_st.session_state.mo = False
+                vAR_modeloutcome = vAR_st.button("Review Model Outcome")
+                if vAR_st.session_state.mo == True:
+                    vAR_st.text("Done")
+        except:
+            pass
     
     col1, col2, col3 = vAR_st.columns([1, 5, 1])
     with col1:
@@ -531,20 +503,13 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if 'mo' not in vAR_st.session_state:
-                                                vAR_st.session_state.mo = False
-                                            if vAR_modeloutcome:
-                                                vAR_mo.outcome_model()
-                                                vAR_st.session_state.mo = True
+        try:
+            if vAR_st.session_state.me != False:
+                if vAR_modeloutcome:
+                    vAR_mo.outcome_model()
+                    vAR_st.session_state.mo = True
+        except:
+            pass
 
     vAR_st.write('')
     col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
@@ -555,46 +520,35 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if vAR_st.session_state.mo != False:
-                                                vAR_st.subheader('Alert Notification')
+        try:
+            if vAR_st.session_state.mo != False:
+                vAR_st.subheader('Alert Notification')
+        except:
+            pass
 
     with col4:
         vAR_st.write('')
 
     with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if vAR_st.session_state.mo != False:
-                                                if 'an' not in vAR_st.session_state:
-                                                    vAR_st.session_state.an = False
-                                                vAR_analyze_e = vAR_st.button("Alert Notification to the Property Manager: Email")
-                                                if vAR_analyze_e:
-                                                    vAR_alert.check_presence(0)
-                                                    vAR_st.session_state.an = True
-                                                if vAR_st.session_state.an == True and vAR_analyze_e:
-                                                    vAR_st.text("Done")
-                                                vAR_analyze_s = vAR_st.button("Alert Notification to the Property Manager: Text")
-                                                if vAR_analyze_s:
-                                                    vAR_alert.check_presence(1)
-                                                    vAR_st.session_state.an = True
-                                                if vAR_st.session_state.an == True and vAR_analyze_s:
-                                                    vAR_st.text("Done")
+        try:
+            if vAR_st.session_state.mo != False:
+                if 'an' not in vAR_st.session_state:
+                    vAR_st.session_state.an = False
+                vAR_analyze_e = vAR_st.button("Alert Notification to the Property Manager: Email")
+                if vAR_analyze_e:
+                    vAR_alert.check_presence(0)
+                    vAR_st.session_state.an = True
+                if vAR_st.session_state.an == True and vAR_analyze_e:
+                    vAR_st.text("Done")
+                vAR_analyze_s = vAR_st.button("Alert Notification to the Property Manager: Text")
+                if vAR_analyze_s:
+                    vAR_alert.check_presence(1)
+                    vAR_st.session_state.an = True
+                if vAR_st.session_state.an == True and vAR_analyze_s:
+                    vAR_st.text("Done")
+        except:
+            pass
+        
     col1, col2, col3 = vAR_st.columns([1, 5, 1])
     with col1:
         vAR_st.write('')
@@ -603,20 +557,61 @@ if __name__ == '__main__':
         vAR_st.write('')
 
     with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if vAR_st.session_state.mo != False:
-                                                if vAR_analyze_e:
-                                                    vAR_st.image('/home/jupyter/Energy_efficiency/Pics_alert/email.png')
-                                                if vAR_analyze_s:
-                                                    vAR_st.image('/home/jupyter/Energy_efficiency/Pics_alert/sms.png')
+        try:
+            if vAR_st.session_state.mo != False:
+                if vAR_analyze_e:
+                    vAR_st.image('/home/jupyter/Energy_efficiency/Pics_alert/email.png')
+                if vAR_analyze_s:
+                    vAR_st.image('/home/jupyter/Energy_efficiency/Pics_alert/sms.png')
+        except:
+            pass
+    vAR_st.write('')
+    vAR_st.write('')
+    col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
+    with col1:
+        vAR_st.write('')
+        
+    with _:
+        vAR_st.write('')
+
+    with col2:
+        try:
+            if vAR_st.session_state.an != False:
+                vAR_st.subheader('Data Visualization')
+        except:
+            pass
+
+    with col4:
+        vAR_st.write('')
+
+    with col3:
+        try:
+            if vAR_st.session_state.an != False:
+                if 'dv' not in vAR_st.session_state:
+                    vAR_st.session_state.dv = False
+                vAR_visualize = vAR_st.button("Analyze data")
+                vAR_visualize_ui = vAR_st.button("Model outcome")
+        except:
+            pass
+
+    try:
+        if vAR_st.session_state.an != False:
+            if vAR_visualize:
+                js = "window.open('https://datastudio.google.com/u/1/reporting/be413248-bb74-4c1b-bf4a-69dde8a9a637/page/WsMEC')"
+                html = '<img src onerror="{}">'.format(js)
+                div = Div(text=html)
+                vAR_st.bokeh_chart(div)
+                vAR_st.session_state.dv = True
+    except:
+        pass
+    
+    try:
+        if vAR_st.session_state.an != False:
+            if vAR_visualize_ui:
+                vAR_vu.visualize()
+                vAR_st.session_state.dv = True
+    except:
+        pass
     
     menu = ["MLOps Components","Data Source","Data Pipeline","Data Engineering","Model Pipeline","Model Engineering","Model Outcome","Analysis","Visualization"]
     choice = vAR_st.sidebar.selectbox(" ",menu)
@@ -633,79 +628,3 @@ if __name__ == '__main__':
 
     href = f'<a style="color:black;" href="" class="button">Clear/Reset</a>'
     vAR_st.sidebar.markdown(href, unsafe_allow_html=True)
-
-    vAR_st.write('')
-    vAR_st.write('')
-    col1, col2, _, col3, col4 = vAR_st.columns([1, 2, 1, 3, 1])
-    with col1:
-        vAR_st.write('')
-        
-    with _:
-        vAR_st.write('')
-
-    with col2:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if vAR_st.session_state.mo != False:
-                                                if vAR_st.session_state.an != False:
-                                                    vAR_st.subheader('Data Visualization')
-
-    with col4:
-        vAR_st.write('')
-
-    with col3:
-        if vAR_datasource != 'Select the source':
-            if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-                if vAR_st.session_state.dp != False:
-                    if vAR_st.session_state.de != False:
-                        if vAR_customers is not None:
-                            if vAR_st.session_state.fs != False:
-                                if vAR_st.session_state.hp != False:
-                                    if vAR_st.session_state.mp != False:
-                                        if vAR_st.session_state.me != False:
-                                            if vAR_st.session_state.mo != False:
-                                                if vAR_st.session_state.an != False:
-                                                    if 'dv' not in vAR_st.session_state:
-                                                        vAR_st.session_state.dv = False
-                                                    vAR_visualize = vAR_st.button("Analyze data")
-                                                    vAR_visualize_ui = vAR_st.button("Model outcome")
-
-    if vAR_datasource != 'Select the source':
-        if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-            if vAR_st.session_state.dp != False:
-                if vAR_st.session_state.de != False:
-                    if vAR_customers is not None:
-                        if vAR_st.session_state.fs != False:
-                            if vAR_st.session_state.hp != False:
-                                if vAR_st.session_state.mp != False:
-                                    if vAR_st.session_state.me != False:
-                                        if vAR_st.session_state.mo != False:
-                                            if vAR_st.session_state.an != False:
-                                                if vAR_visualize:
-                                                    js = "window.open('https://datastudio.google.com/u/1/reporting/be413248-bb74-4c1b-bf4a-69dde8a9a637/page/WsMEC')"  # New tab or window
-                                                    html = '<img src onerror="{}">'.format(js)
-                                                    div = Div(text=html)
-                                                    vAR_st.bokeh_chart(div)
-                                                    vAR_st.session_state.dv = True
-    
-    if vAR_datasource != 'Select the source':
-        if (vAR_st.session_state.f != False) and (vAR_st.session_state.vu != False):
-            if vAR_st.session_state.dp != False:
-                if vAR_st.session_state.de != False:
-                    if vAR_customers is not None:
-                        if vAR_st.session_state.fs != False:
-                            if vAR_st.session_state.hp != False:
-                                if vAR_st.session_state.mp != False:
-                                    if vAR_st.session_state.me != False:
-                                        if vAR_st.session_state.mo != False:
-                                            if vAR_st.session_state.an != False:
-                                                if vAR_visualize_ui:
-                                                    vAR_vu.visualize()
-                                                    vAR_st.session_state.dv = True
