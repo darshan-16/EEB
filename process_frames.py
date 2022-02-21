@@ -2,7 +2,7 @@ import cv2
 import app
 import numpy as np
 from mtcnn import MTCNN
-import database as vAR_db
+from database import database as vAR_db
 import streamlit as vAR_st
 from deepface import DeepFace
 from deepface.basemodels import VGGFace
@@ -52,7 +52,7 @@ def frame_process(frame, df, i):
         obj = DeepFace.analyze(np.array(face_crop,dtype=np.uint8), actions = ['gender', 'race'] ,enforce_detection=False)
         gender.append(obj['gender'])
         race.append(obj['dominant_race'])
-        df1 = DeepFace.find(np.array(face_crop,dtype=np.uint8), db_path='/home/dsailabusr1/Energy_efficiency/model',
+        df1 = DeepFace.find(np.array(face_crop,dtype=np.uint8), db_path='/home/jupyter/Energy_efficiency/model',
                              model_name='VGG-Face', model=mod, enforce_detection=False)
         if(df1.shape[0]>0):
             name = str(df1.iloc[0].identity)
@@ -60,11 +60,11 @@ def frame_process(frame, df, i):
             if(name[6] not in customer):
                 try:
                     customer.append(name[6])
-                    df2 = df.loc[df['Customer Name']==name[6]]
-                    address.append(df2.iloc[0]['Customer Address'])
-                    phone.append(df2.iloc[0]['Customer Phone'])
-                    email.append(df2.iloc[0]['Customer Email'])
-                    cid.append(df2.iloc[0]['Customer ID'])
+                    df2 = df.loc[df['Property Manager/Owner Name']==name[6]]
+                    address.append(df2.iloc[0]['Property Contact Address'])
+                    phone.append(df2.iloc[0]['Property Contact Phone'])
+                    email.append(df2.iloc[0]['Property Contact Email'])
+                    cid.append(df2.iloc[0]['Property ID'])
                 except:
                     pass
         cv2.rectangle(frame, (x, y), (x+width, y+height), (0,155,255), 2)
@@ -75,4 +75,4 @@ def frame_process(frame, df, i):
     _, buffer = cv2.imencode('.jpg', frame)
     im_bytes = buffer.tobytes()
     encodedJPG = b64encode(im_bytes)
-    vAR_db.insertFrameData(encodedJPG, str(cid), str(customer), str(phone), str(address), str(email), str(race), male, female, i)
+    vAR_db.insertFrameData(encodedJPG, str(cid), str(customer), str(address), str(phone), str(email), str(race), male, female, i)
