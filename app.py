@@ -1,11 +1,11 @@
 import html
-import process_frames as vAR_pf
-from capture_frames import capture_frames as vAR_cfu
-import model_outcome as vAR_mo
-import visual as vAR_vu
 import pandas as pd
 import streamlit as vAR_st
-from alert import alert_notification as vAR_alert
+from Model_Engineering import process_frames as vAR_pf
+from Data_Engineering.capture_frames import capture_frames as vAR_cfu
+from Utilities import model_outcome as vAR_mo
+from Visualization import visual as vAR_vu
+from Utilities.alert import alert_notification as vAR_alert
 import streamlit.components.v1 as components
 from IPython.display import HTML
 from bokeh.models.widgets import Div
