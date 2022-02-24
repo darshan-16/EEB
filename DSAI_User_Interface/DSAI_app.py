@@ -1,6 +1,8 @@
 import html
 import pandas as pd
 import streamlit as vAR_st
+import sys, os
+sys.path.append(os.path.join(os.path.dirname(__file__), '..'))
 from DSAI_Model_Engineering import DSAI_process_frames as vAR_pf
 from DSAI_Data_Engineering.DSAI_capture_frames import capture_frames as vAR_cfu
 from DSAI_Visualization import DSAI_model_outcome as vAR_mo
