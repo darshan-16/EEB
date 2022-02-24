@@ -1,6 +1,6 @@
 import re
 import cv2
-import DSAI_app
+import DSAI_User_Interface.DSAI_app
 import pafy
 import urllib
 import requests

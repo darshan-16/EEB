@@ -1,5 +1,5 @@
 import cv2
-import DSAI_app
+import DSAI_User_Interface.DSAI_app
 import numpy as np
 from mtcnn import MTCNN
 from DSAI_Data_Engineering.DSAI_Database.DSAI_database import database as vAR_db
