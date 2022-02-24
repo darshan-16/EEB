@@ -20,7 +20,7 @@ if __name__ == '__main__':
     with col1:
         vAR_st.write('')
     with col2:
-        vAR_st.image('https://raw.githubusercontent.com/tarun243/Streamlit-commonToAllIndustry/master/Web_app/Logo_final.png')
+        vAR_st.image('/home/jupyter/Energy_efficiency/DSAI_Utilities/DSAI_Logo/DSAI_Logo_final.png')
     with col3:
         vAR_st.write('')
 
